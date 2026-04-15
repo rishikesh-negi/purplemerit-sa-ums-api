@@ -1,0 +1,29 @@
+{
+  "include": ["src/**/*", "tests/**/*", "src/index.ts", "app.ts"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "rootDir": "src",
+    "outDir": "dist",
+
+    "strict": true,
+    "noEmitOnError": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "allowUnreachableCode": false,
+    "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "erasableSyntaxOnly": true,
+
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+
+    "verbatimModuleSyntax": true,
+
+    "types": ["node", "jsonwebtoken"]
+  }
+}
