@@ -1,5 +1,4 @@
-import type { Request, Response, NextFunction } from "express";
-import type { ParsedUrlQuery } from "querystring";
+import type { NextFunction, Request, Response } from "express";
 import sanitizeHtml from "sanitize-html";
 
 function sanitizeValue(value: unknown): unknown {
@@ -30,7 +29,6 @@ function sanitizeValue(value: unknown): unknown {
 
 export function sanitizeRequest(req: Request<unknown>, _res: Response, next: NextFunction) {
   if (req.body) req.body = sanitizeValue(req.body);
-  if (req.query) req.query = sanitizeValue(req.query) as ParsedUrlQuery;
   if (req.params) req.params = sanitizeValue(req.params);
   next();
 }
