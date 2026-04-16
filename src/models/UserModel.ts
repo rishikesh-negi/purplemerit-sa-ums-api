@@ -65,6 +65,7 @@ const userSchema = new Schema(
       type: String,
       enum: ["user", "manager", "admin"],
       default: "user",
+      index: true,
     },
     password: {
       type: String,
@@ -79,8 +80,8 @@ const userSchema = new Schema(
     passwordChangedAt: Date,
     createdAt: { type: Date, default: new Date(Date.now()), select: false, immutable: true },
     updatedAt: { type: Date, default: null, select: false },
-    createdBy: { type: Schema.ObjectId, ref: "Users", default: "self" },
-    updatedBy: { type: Schema.ObjectId, ref: "Users", default: "self" },
+    createdBy: { type: Schema.ObjectId, ref: "Users", default: null },
+    updatedBy: { type: Schema.ObjectId, ref: "Users", default: null },
     active: { type: Boolean, default: true, select: false },
   },
   { timestamps: true },
@@ -91,7 +92,7 @@ userSchema.pre("save", setPasswordChangeTimestampPreSave);
 
 userSchema.pre(/^find/, async function (this: Query<unknown, IUser>) {
   if (this.getOptions()["includeInactive"]) return;
-  this.where("active").ne(false);
+  this.where("active").ne(false).populate("createdBy").populate("updatedBy");
 });
 
 userSchema.methods["matchPasswords"] = matchPasswords;
