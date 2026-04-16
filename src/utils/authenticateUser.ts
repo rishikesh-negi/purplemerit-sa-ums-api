@@ -21,9 +21,12 @@ export async function authenticateUser(authParams: AuthCreatorFunctionParams) {
 
   res.cookie(REFRESH_JWT_COOKIE_NAME, refreshToken, {
     expires: refreshTokenExpiry,
-    secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+    secure:
+      process.env["NODE_ENV"] === "development"
+        ? false
+        : req.secure || req.headers["x-forwarded-proto"] === "https",
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: process.env["NODE_ENV"] === "development" ? "lax" : "strict",
   });
 
   const userData: Record<string, unknown> = {};
