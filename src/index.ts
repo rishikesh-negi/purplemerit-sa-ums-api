@@ -1,7 +1,8 @@
 import dotenv from "dotenv";
-dotenv.config({ path: "./config.env" });
+dotenv.config({ path: path.resolve(process.cwd(), "config.env") });
 
 import mongoose from "mongoose";
+import path from "path";
 import app from "./app.js";
 import { gracefulShutdown, shutdown } from "./utils/gracefulShutdown.js";
 
@@ -10,7 +11,7 @@ process.on("uncaughtException", (err) => {
   console.log(`${err.name}: ${err.message}`);
 });
 
-const DB = process.env["DATABASE"]?.replace("<DB_PASSWORD", process.env["DB_PASSWORD"]!);
+const DB = process.env["DATABASE"]?.replace("<DB_PASSWORD>", process.env["DB_PASSWORD"]!);
 
 mongoose
   .connect(DB!)
