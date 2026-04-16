@@ -5,7 +5,7 @@ import { createUser, deleteUser, getUsers, updateUser } from "../controllers/use
 export const userRouter = Router();
 
 userRouter.post("/signup", signup);
-userRouter.post("login", login);
+userRouter.post("/login", login);
 
 userRouter.use(protect);
 userRouter.get("/logout", logout);
