@@ -8,16 +8,18 @@ import morgan from "morgan";
 import { AppError } from "./errors/AppError.js";
 import { globalErrorHandler } from "./middleware/globalErrorHandler.js";
 import { sanitizeRequest } from "./middleware/sanitizeData.js";
+import { userRouter } from "./routes/userRoutes.js";
 
 const app = express();
 
-const allowedOrigins = ["https://localhost:8000", "https://purplemerit-ums.vercel.app"];
+const allowedOrigins = ["http://localhost:8000", "https://purplemerit-ums.vercel.app"];
 
 app.enable("trust-proxy");
 app.use(
   cors({
     origin(origin, callback) {
-      if (allowedOrigins.indexOf(origin!) !== -1) callback(null, true);
+      if (process.env["NODE_ENV"] === "development" && !origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin!) !== -1) return callback(null, true);
       else callback(new Error("Not allowed by the API's CORS policy"));
     },
     credentials: true,
@@ -44,6 +46,8 @@ app.use(
     whitelist: [],
   }),
 );
+
+app.use("/api/v1/users", userRouter);
 
 app.all(/.*/, (req, _res, next) => {
   next(new AppError(`The requested resource ${req.originalUrl} does not exist`, 404));
