@@ -111,7 +111,7 @@ export class UnauthorizedAccessError extends AppError {
   }
 }
 
-export class ForbiddebAccessError extends AppError {
+export class ForbiddenAccessError extends AppError {
   constructor(message = "Forbidden: Authorization Failed") {
     super(message, 403);
   }
