@@ -87,7 +87,7 @@ export const protect = catchAsyncError(async (req, res, next) => {
     return next(new PasswordChangedReloginError());
 
   req.user = sessionUser;
-  return next();
+  next();
 });
 
 export const refreshSession = catchAsyncError(async (req, res, next) => {
@@ -113,7 +113,7 @@ export const refreshSession = catchAsyncError(async (req, res, next) => {
 });
 
 export const restrictTo = (...roles: string[]) => {
-  return (req: RequestWithUser, res: Response, next: NextFunction) => {
+  return (req: RequestWithUser, _res: Response, next: NextFunction) => {
     if (!roles.includes(req.user?.role || "")) return next(new UnauthorizedAccessError());
     next();
   };
