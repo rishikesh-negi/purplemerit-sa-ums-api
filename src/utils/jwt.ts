@@ -18,7 +18,6 @@ export function signAuthJWT(payload: AuthJWTPayload, tokenType: "access" | "refr
   const { ACCESS_JWT_SECRET, REFRESH_JWT_SECRET, ACCESS_JWT_EXPIRES_IN, REFRESH_JWT_EXPIRES_IN } =
     getJwtEnvVars();
   const jwtSecret: Secret = tokenType === "access" ? ACCESS_JWT_SECRET : REFRESH_JWT_SECRET;
-  console.log(jwtSecret);
   const expiresIn: ms.StringValue = (
     tokenType === "access" ? ACCESS_JWT_EXPIRES_IN : REFRESH_JWT_EXPIRES_IN
   ) as ms.StringValue;
