@@ -83,8 +83,7 @@ export const protect = catchAsyncError(async (req, res, next) => {
   const userId = new mongoose.Types.ObjectId(id);
   const sessionUser = (await User.findById(userId)) as UserDocument;
   if (!sessionUser) return next(new UserNotFoundError());
-  if (!sessionUser.changedPasswordAfter(decoded.iat))
-    return next(new PasswordChangedReloginError());
+  if (sessionUser.changedPasswordAfter(decoded.iat)) return next(new PasswordChangedReloginError());
 
   req.user = sessionUser;
   next();
