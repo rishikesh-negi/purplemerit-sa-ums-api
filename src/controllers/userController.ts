@@ -12,6 +12,7 @@ export const getUsers = catchAsyncError(async (req, res) => {
   type QueryParams = { page?: string; limit?: string; search?: string };
 
   const { page: queryPage = 1, limit: queryLimit = 10, search = "" } = req.query as QueryParams;
+  const userCount = await User.countDocuments({ active: true });
   const page = Number(queryPage);
   const limit = Number(queryLimit);
   let users;
@@ -20,22 +21,54 @@ export const getUsers = catchAsyncError(async (req, res) => {
     users = await User.aggregate([
       {
         $search: {
-          index: "default",
-          text: {
-            query: search,
-            path: ["firstName", "lastName", "username", "email"],
-            fuzzy: {
-              maxEdits: 2,
-              prefixLength: 1,
-            },
+          index: "search-users",
+          compound: {
+            should: [
+              {
+                autocomplete: {
+                  query: search,
+                  path: "firstName",
+                  score: { boost: { value: 4 } },
+                },
+              },
+              {
+                autocomplete: {
+                  query: search,
+                  path: "lastName",
+                  score: { boost: { value: 4 } },
+                },
+              },
+              {
+                autocomplete: {
+                  query: search,
+                  path: "fullName",
+                  score: { boost: { value: 3 } },
+                },
+              },
+              {
+                autocomplete: {
+                  query: search,
+                  path: "username",
+                  score: { boost: { value: 2 } },
+                },
+              },
+              {
+                autocomplete: {
+                  query: search,
+                  path: "email",
+                  score: { boost: { value: 1 } },
+                },
+              },
+            ],
           },
         },
       },
+      { $match: { active: true } },
       {
-        $skip: (page - 1) * limit,
-      },
-      {
-        $limit: limit,
+        $facet: {
+          metadata: [{ $count: "userCount" }],
+          data: [{ $skip: (page - 1) * limit }, { $limit: limit }],
+        },
       },
     ]);
   }
@@ -49,6 +82,7 @@ export const getUsers = catchAsyncError(async (req, res) => {
 
   res.status(200).json({
     users,
+    userCount: search !== "" ? users![0]?.metadata[0]?.userCount : userCount,
   });
 });
 
