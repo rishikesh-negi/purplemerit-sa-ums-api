@@ -12,7 +12,12 @@ import { userRouter } from "./routes/userRoutes.js";
 
 const app = express();
 
-const allowedOrigins = ["http://localhost:8000", "https://purplemerit-ums.vercel.app"];
+const allowedOrigins = [
+  "http://localhost:8000",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "https://purplemerit-ums.vercel.app",
+];
 
 app.enable("trust-proxy");
 app.use(
