@@ -31,7 +31,7 @@ export async function authenticateUser(authParams: AuthCreatorFunctionParams) {
 
   const userData: Record<string, unknown> = {};
   const userObject: Record<string, unknown> = user.toObject();
-  for (const key in Object.keys(userObject)) {
+  for (const key in userObject) {
     if (key === "password" || key === "passwordChangedAt" || key === "active") continue;
     userData[key] = userObject[key];
   }
