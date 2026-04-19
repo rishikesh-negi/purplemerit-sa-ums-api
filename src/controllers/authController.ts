@@ -92,7 +92,7 @@ export const protect = catchAsyncError(async (req, res, next) => {
 export const refreshSession = catchAsyncError(async (req, res, next) => {
   const refreshToken = req.cookies[REFRESH_JWT_COOKIE_NAME];
   if (!refreshToken) {
-    res.redirect("/login");
+    res.redirect("/");
     return next(new UnauthorizedAccessError());
   }
 
