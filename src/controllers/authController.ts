@@ -125,3 +125,14 @@ export const logout = catchAsyncError(async (req, res) => {
   removeClientRefreshTokenCookie(req, res);
   return res.sendStatus(204);
 });
+
+export const checkAuth = catchAsyncError(async (req, res) => {
+  const refreshToken = req.cookies[REFRESH_JWT_COOKIE_NAME];
+  if (!refreshToken) return res.sendStatus(401);
+  if (refreshToken) {
+    const sessionIsValid = await checkSessionValidity(refreshToken);
+    if (!sessionIsValid) return res.sendStatus(401);
+  }
+
+  return res.sendStatus(200);
+});
