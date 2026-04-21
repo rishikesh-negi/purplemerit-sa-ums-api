@@ -14,6 +14,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:8000",
+  "http://127.0.0.1:8000",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
   "https://purplemerit-ums.vercel.app",
@@ -36,7 +37,7 @@ if (process.env["NODE_ENV"] === "development") app.use(morgan("dev"));
 
 const limiter = rateLimit({
   limit: 120,
-  windowMs: 60 * 60 * 1000,
+  windowMs: 30 * 60 * 1000,
   message: "You have been rate limited. Please try again after some time",
 });
 app.use("/api", limiter);
