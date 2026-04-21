@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  checkAuth,
   login,
   logout,
   protect,
@@ -15,6 +16,7 @@ userRouter.post("/signup", signup);
 userRouter.post("/login", login);
 userRouter.get("/refresh-session", refreshSession);
 userRouter.get("/logout", logout);
+userRouter.get("/check-auth", checkAuth);
 
 userRouter.use(protect);
 userRouter
